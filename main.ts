@@ -1,8 +1,8 @@
-function CreateRandomMaze () {
+function CreateMap () {
     tiles.setCurrentTilemap(tilemap`level12`)
     // Hard coded tilemap size before realizing there's a tilemap extension that lets you see the tilemap size.
-    tilemapLastRow = 19
-    tileMapLastCol = 19
+    tilemapLastRow = 35
+    tileMapLastCol = 35
     cursor = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -27,7 +27,7 @@ function CreateRandomMaze () {
     while (visitedLocations.length > 0) {
         currentCell = visitedLocations.pop()
         tiles.placeOnTile(cursor, currentCell)
-        tiles.setTileAt(currentCell, img`MazeFloor`)
+        tiles.setTileAt(currentCell, assets.tile`transparency16`)
         candidateLocations = adjacentPathCandidateLocations()
         branchingFrom = cursor.tilemapLocation()
         while (candidateLocations.length > 0) {
@@ -35,24 +35,40 @@ function CreateRandomMaze () {
                 pause(40)
             }
             tiles.placeOnTile(cursor, candidateLocations.removeAt(randint(0, candidateLocations.length - 1)))
-            if (adjacentOccupiedCount() == 1) {
+            if (SpacesAround() == 1) {
                 visitedLocations.push(branchingFrom)
                 visitedLocations.push(cursor.tilemapLocation())
                 break;
             }
         }
     }
-    mazeFloorTiles = tiles.getTilesByType(img`MazeFloor`)
+    mazeFloorTiles = tiles.getTilesByType(assets.tile`transparency16`)
     randomMazeTile = tiles.getTileLocation(0, 0)
     while (randomMazeTile.row < tilemapLastRow / 1.5 || randomMazeTile.column < tileMapLastCol / 1.5) {
         randomMazeTile = mazeFloorTiles._pickRandom()
     }
-    tiles.setTileAt(randomMazeTile, img`Treasure Chest`)
     wallTiles = tiles.getTilesByType(assets.tile`transparency16`)
     for (let value of wallTiles) {
-        tiles.setTileAt(value, img`Lava`)
+        tiles.setTileAt(value, assets.tile`myTile`)
         tiles.setWallAt(value, true)
     }
+}
+function SpacesAround () {
+    count = 0
+    currentLocation = cursor.tilemapLocation()
+    if (cursor.tileKindAt(TileDirection.Top, assets.tile`transparency16`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Left, assets.tile`transparency16`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Bottom, assets.tile`transparency16`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Right, assets.tile`transparency16`)) {
+        count += 1
+    }
+    return count
 }
 controller.player2.onEvent(ControllerEvent.Connected, function () {
     enum SpriteKind {
@@ -121,27 +137,10 @@ function adjacentPathCandidateLocations () {
     }
     return adjacentLocations
 }
-function adjacentOccupiedCount () {
-    count = 0
-    currentLocation = cursor.tilemapLocation()
-    if (cursor.tileKindAt(TileDirection.Top, img`MazeFloor`)) {
-        count += 1
-    }
-    if (cursor.tileKindAt(TileDirection.Left, img`MazeFloor`)) {
-        count += 1
-    }
-    if (cursor.tileKindAt(TileDirection.Bottom, img`MazeFloor`)) {
-        count += 1
-    }
-    if (cursor.tileKindAt(TileDirection.Right, img`MazeFloor`)) {
-        count += 1
-    }
-    return count
-}
-let count = 0
-let currentLocation: tiles.Location = null
 let adjacentLocations: tiles.Location[] = []
 let playerTwo: Sprite = null
+let currentLocation: tiles.Location = null
+let count = 0
 let wallTiles: tiles.Location[] = []
 let randomMazeTile: tiles.Location = null
 let mazeFloorTiles: tiles.Location[] = []
@@ -158,28 +157,6 @@ enum SpriteKind {
     MyselfOne,
     MyselfTwo
 }
-tiles.setCurrentTilemap(tilemap`level8`)
-let Tilemap_X = 36
-let TileMap_Y = 36
-let tile = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.Player)
-tiles.placeOnTile(tile, tiles.getTileLocation(0, 0))
 scene.setBackgroundImage(img`
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -338,7 +315,6 @@ let playerOne = sprites.create(img`
     . . . . . . 1 . . . 1 . . . . . 
     . . . . . . 1 . . . 1 . . . . . 
     `, SpriteKind.MyselfOne)
-tiles.placeOnRandomTile(playerOne, assets.tile`transparency16`)
 Render.setViewMode(ViewMode.raycastingView)
 Render.setViewAngleInDegree(90)
 // Set the initial position of the sprite
@@ -347,7 +323,7 @@ mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.One))
 scene.cameraFollowSprite(playerOne)
 mp.setPlayerIndicatorsVisible(true)
 delay = game.ask("Press A to watch it build")
-CreateRandomMaze()
+CreateMap()
 tiles.placeOnTile(cursor, tiles.getTileLocation(0, 0))
 cursor.setImage(img`
     . . . . . . . . . . . . . . . . 
@@ -367,4 +343,3 @@ cursor.setImage(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `)
-controller.moveSprite(cursor, 150, 150)
