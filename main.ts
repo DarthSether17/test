@@ -1,13 +1,57 @@
-namespace SpriteKind {
-    export const gun = SpriteKind.create()
-}
-function MapGenerator (bool: boolean, bool2: boolean, bool3: boolean, bool4: boolean, num: number) {
-    availableLocations = []
-    currentLocation = tile.tilemapLocation()
-    if (bool) {
-        tiles.setCurrentTilemap(tilemap`level7`)
-    } else {
-    	
+function CreateRandomMaze () {
+    tiles.setCurrentTilemap(tilemap`level12`)
+    // Hard coded tilemap size before realizing there's a tilemap extension that lets you see the tilemap size.
+    tilemapLastRow = 19
+    tileMapLastCol = 19
+    cursor = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Player)
+    tiles.placeOnTile(cursor, tiles.getTileLocation(0, 0))
+    scene.cameraFollowSprite(cursor)
+    visitedLocations = [cursor.tilemapLocation()]
+    while (visitedLocations.length > 0) {
+        currentCell = visitedLocations.pop()
+        tiles.placeOnTile(cursor, currentCell)
+        tiles.setTileAt(currentCell, img`MazeFloor`)
+        candidateLocations = adjacentPathCandidateLocations()
+        branchingFrom = cursor.tilemapLocation()
+        while (candidateLocations.length > 0) {
+            if (delay) {
+                pause(40)
+            }
+            tiles.placeOnTile(cursor, candidateLocations.removeAt(randint(0, candidateLocations.length - 1)))
+            if (adjacentOccupiedCount() == 1) {
+                visitedLocations.push(branchingFrom)
+                visitedLocations.push(cursor.tilemapLocation())
+                break;
+            }
+        }
+    }
+    mazeFloorTiles = tiles.getTilesByType(img`MazeFloor`)
+    randomMazeTile = tiles.getTileLocation(0, 0)
+    while (randomMazeTile.row < tilemapLastRow / 1.5 || randomMazeTile.column < tileMapLastCol / 1.5) {
+        randomMazeTile = mazeFloorTiles._pickRandom()
+    }
+    tiles.setTileAt(randomMazeTile, img`Treasure Chest`)
+    wallTiles = tiles.getTilesByType(assets.tile`transparency16`)
+    for (let value of wallTiles) {
+        tiles.setTileAt(value, img`Lava`)
+        tiles.setWallAt(value, true)
     }
 }
 controller.player2.onEvent(ControllerEvent.Connected, function () {
@@ -59,10 +103,56 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two), sprites.create(img`
     // Set the initial position of the sprite
     playerTwo.setPosition(playerTwo.x, playerTwo.y)
 })
-let playerTwo: Sprite = null
+// Not being able to have a location (type: Generic Object) as a parameter sucks. We'll just use the location of a global variable sprite to follow with the camera as the maze is being built.
+function adjacentPathCandidateLocations () {
+    adjacentLocations = []
+    currentLocation = cursor.tilemapLocation()
+    if (currentLocation.row > 0 && cursor.tileKindAt(TileDirection.Top, assets.tile`transparency16`)) {
+        adjacentLocations.push(tiles.getTileLocation(currentLocation.column, currentLocation.row - 1))
+    }
+    if (currentLocation.row < tilemapLastRow && cursor.tileKindAt(TileDirection.Bottom, assets.tile`transparency16`)) {
+        adjacentLocations.push(tiles.getTileLocation(currentLocation.column, currentLocation.row + 1))
+    }
+    if (currentLocation.column > 0 && cursor.tileKindAt(TileDirection.Left, assets.tile`transparency16`)) {
+        adjacentLocations.push(tiles.getTileLocation(currentLocation.column - 1, currentLocation.row))
+    }
+    if (currentLocation.column < tileMapLastCol && cursor.tileKindAt(TileDirection.Right, assets.tile`transparency16`)) {
+        adjacentLocations.push(tiles.getTileLocation(currentLocation.column + 1, currentLocation.row))
+    }
+    return adjacentLocations
+}
+function adjacentOccupiedCount () {
+    count = 0
+    currentLocation = cursor.tilemapLocation()
+    if (cursor.tileKindAt(TileDirection.Top, img`MazeFloor`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Left, img`MazeFloor`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Bottom, img`MazeFloor`)) {
+        count += 1
+    }
+    if (cursor.tileKindAt(TileDirection.Right, img`MazeFloor`)) {
+        count += 1
+    }
+    return count
+}
+let count = 0
 let currentLocation: tiles.Location = null
-let availableLocations: number[] = []
-let tile: Sprite = null
+let adjacentLocations: tiles.Location[] = []
+let playerTwo: Sprite = null
+let wallTiles: tiles.Location[] = []
+let randomMazeTile: tiles.Location = null
+let mazeFloorTiles: tiles.Location[] = []
+let branchingFrom: tiles.Location = null
+let candidateLocations: tiles.Location[] = []
+let currentCell: tiles.Location = null
+let visitedLocations: tiles.Location[] = []
+let tileMapLastCol = 0
+let tilemapLastRow = 0
+let cursor: Sprite = null
+let delay = false
 let myselfTwo = null
 enum SpriteKind {
     MyselfOne,
@@ -71,7 +161,7 @@ enum SpriteKind {
 tiles.setCurrentTilemap(tilemap`level8`)
 let Tilemap_X = 36
 let TileMap_Y = 36
-tile = sprites.create(img`
+let tile = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -90,7 +180,6 @@ tile = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Player)
 tiles.placeOnTile(tile, tiles.getTileLocation(0, 0))
-MapGenerator(tile.row > 0 && tile.tileKindAt(TileDirection.Top, assets.tile`transparency16`), tile.row < TileMap_Y && tile.tileKindAt(TileDirection.Bottom, assets.tile`transparency16`), tile.column < Tilemap_X && tile.tileKindAt(TileDirection.Left, assets.tile`transparency16`), tile.column > 0 && tile.tileKindAt(TileDirection.Right, assets.tile`transparency16`), 1)
 scene.setBackgroundImage(img`
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
     1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
@@ -257,7 +346,10 @@ playerOne.setPosition(playerOne.x, playerOne.y)
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.One))
 scene.cameraFollowSprite(playerOne)
 mp.setPlayerIndicatorsVisible(true)
-let gun = sprites.create(img`
+delay = game.ask("Press A to watch it build")
+CreateRandomMaze()
+tiles.placeOnTile(cursor, tiles.getTileLocation(0, 0))
+cursor.setImage(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -274,5 +366,5 @@ let gun = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    `, SpriteKind.gun)
-gun.setFlag(SpriteFlag.RelativeToCamera, true)
+    `)
+controller.moveSprite(cursor, 150, 150)
