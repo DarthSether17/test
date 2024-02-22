@@ -1,16 +1,36 @@
 namespace SpriteKind {
-    export const location = SpriteKind.create()
+    export const builder = SpriteKind.create()
 }
-function occupation (num: number) {
-    if (true) {
+function occupation3 (num: number) {
+    if (num == 0) {
+        tiles.setTileAt(currentLocation, assets.tile`myTile`)
+        direction = tiles.getTileLocation(currentLocation.x + 1, currentLocation.y)
+    } else {
     	
     }
 }
-scene.onHitWall(SpriteKind.location, function (sprite, location) {
+scene.onHitWall(SpriteKind.builder, function (sprite, location) {
     touching = 1
 })
 function MakeMap (Mazy: number, Direction: number, length: number, extraNum: number, overlap: boolean) {
-    location.setKind(SpriteKind.location)
+    place = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.builder)
     currentLocation = tiles.getTileLocation(17, 17)
     maniness = Mazy
     if (maniness <= 3) {
@@ -29,38 +49,62 @@ function MakeMap (Mazy: number, Direction: number, length: number, extraNum: num
     if (Direction == 0) {
         for (let index = 0; index < length; index++) {
             direction = currentLocation.getNeighboringLocation(CollisionDirection.Left)
-            location = direction
+            tiles.placeOnTile(place, currentLocation)
             touching = 0
-            occupation(1)
+            occupation1(touching)
         }
     } else if (Direction == 1) {
         for (let index = 0; index < length; index++) {
             direction = currentLocation.getNeighboringLocation(CollisionDirection.Top)
-            location = direction
+            tiles.placeOnTile(place, currentLocation)
             touching = 0
-            occupation(1)
+            occupation2(touching)
         }
     } else if (Direction == 2) {
         for (let index = 0; index < length; index++) {
             direction = currentLocation.getNeighboringLocation(CollisionDirection.Right)
-            location = direction
+            tiles.placeOnTile(place, currentLocation)
             touching = 0
-            occupation(1)
+            occupation3(touching)
         }
     } else {
         for (let index = 0; index < length; index++) {
             direction = currentLocation.getNeighboringLocation(CollisionDirection.Bottom)
-            location = direction
+            tiles.placeOnTile(place, currentLocation)
             touching = 0
-            occupation(1)
+            occupation4(touching)
         }
     }
 }
-let direction: tiles.Location = null
+function occupation1 (num: number) {
+    if (num == 0) {
+        tiles.setTileAt(currentLocation, assets.tile`myTile`)
+        direction = tiles.getTileLocation(currentLocation.x - 1, currentLocation.y)
+    } else {
+    	
+    }
+}
+function occupation4 (num: number) {
+    if (num == 0) {
+        tiles.setTileAt(currentLocation, assets.tile`myTile`)
+        direction = tiles.getTileLocation(currentLocation.x, currentLocation.y + 1)
+    } else {
+    	
+    }
+}
+function occupation2 (num: number) {
+    if (num == 0) {
+        tiles.setTileAt(currentLocation, assets.tile`myTile`)
+        direction = tiles.getTileLocation(currentLocation.x, currentLocation.y - 1)
+    } else {
+    	
+    }
+}
 let length = 0
 let maniness = 0
-let currentLocation: tiles.Location = null
-let location: Sprite = null
+let place: Sprite = null
 let touching = 0
+let direction: tiles.Location = null
+let currentLocation: tiles.Location = null
 tiles.setCurrentTilemap(tilemap`level17`)
 MakeMap(game.askForNumber("How mazy?", 1), randint(0, 4), randint(0, 15), 1, true)
