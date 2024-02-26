@@ -76,24 +76,24 @@ function MakeMap (Mazy: number, Direction: number, length: number, extraNum: num
         }
     }
 }
-function occupation1 (num: number) {
-    if (num == 0) {
+function occupation1 (num2: number) {
+    if (num2 == 0) {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         direction = tiles.getTileLocation(currentLocation.x - 1, currentLocation.y)
     } else {
     	
     }
 }
-function occupation4 (num: number) {
-    if (num == 0) {
+function occupation4 (num3: number) {
+    if (num3 == 0) {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         direction = tiles.getTileLocation(currentLocation.x, currentLocation.y + 1)
     } else {
     	
     }
 }
-function occupation2 (num: number) {
-    if (num == 0) {
+function occupation2 (num4: number) {
+    if (num4 == 0) {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         direction = tiles.getTileLocation(currentLocation.x, currentLocation.y - 1)
     } else {
@@ -106,5 +106,6 @@ let place: Sprite = null
 let touching = 0
 let direction: tiles.Location = null
 let currentLocation: tiles.Location = null
+let length2 = 0
 tiles.setCurrentTilemap(tilemap`level17`)
 MakeMap(game.askForNumber("How mazy?", 1), randint(0, 4), randint(0, 15), 1, true)
