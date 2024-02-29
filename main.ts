@@ -2,7 +2,7 @@ namespace SpriteKind {
     export const builder = SpriteKind.create()
     export const image = SpriteKind.create()
 }
-function Occupation3 (Occupation3Length: Sprite) {
+function Occupation3(Occupation3Length: Sprite) {
     if (Occupation3Length.isHittingTile(CollisionDirection.Right)) {
         direction = tiles.getTileLocation(currentLocation.column - 1, currentLocation.row)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Left))
@@ -18,7 +18,7 @@ function Occupation3 (Occupation3Length: Sprite) {
     }
     pause(40)
 }
-function Occupation1 (Ocupation1Length: Sprite) {
+function Occupation1(Ocupation1Length: Sprite) {
     if (Ocupation1Length.isHittingTile(CollisionDirection.Left)) {
         currentLocation = tiles.getTileLocation(currentLocation.column + 1, currentLocation.row)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Right))
@@ -32,7 +32,7 @@ function Occupation1 (Ocupation1Length: Sprite) {
     }
     pause(40)
 }
-function MakeMap (Mazy: number, Direction: number, length: number, extraNum: number, overlap: boolean) {
+function MakeMap(Mazy: number, Direction: number, length: number, extraNum: number, overlap: boolean) {
     maziness = Mazy
     length2 = length
     for (let index = 0; index < Mazy; index++) {
@@ -71,7 +71,7 @@ function MakeMap (Mazy: number, Direction: number, length: number, extraNum: num
         }
     }
 }
-function Occupation2 (Occupation2Length: Sprite) {
+function Occupation2(Occupation2Length: Sprite) {
     if (Occupation2Length.isHittingTile(CollisionDirection.Top)) {
         direction = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Bottom))
@@ -87,7 +87,7 @@ function Occupation2 (Occupation2Length: Sprite) {
     }
     pause(40)
 }
-function Occupation4 (Occupation4Length: Sprite) {
+function Occupation4(Occupation4Length: Sprite) {
     if (Occupation4Length.isHittingTile(CollisionDirection.Bottom)) {
         direction = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Top))
