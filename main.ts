@@ -2,23 +2,24 @@ namespace SpriteKind {
     export const builder = SpriteKind.create()
     export const image = SpriteKind.create()
 }
-function Occupation3(Occupation3Length: Sprite) {
+function Occupation3 (Occupation3Length: Sprite) {
     if (Occupation3Length.isHittingTile(CollisionDirection.Right)) {
-        direction = tiles.getTileLocation(currentLocation.column - 1, currentLocation.row)
-        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Left))
         currentLocation = tiles.getTileLocation(currentLocation.column - 1, currentLocation.row)
+        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Left))
         tiles.setTileAt(currentLocation, assets.tile`transparency16`)
         tiles.setWallAt(currentLocation, false)
     } else {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         tiles.setWallAt(currentLocation, true)
-        direction = tiles.getTileLocation(currentLocation.column + 1, currentLocation.row)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Right))
         currentLocation = tiles.getTileLocation(currentLocation.column + 1, currentLocation.row)
     }
     pause(40)
 }
-function Occupation1(Ocupation1Length: Sprite) {
+mp.onButtonEvent(mp.MultiplayerButton.A, ControllerButtonEvent.Pressed, function (player2) {
+	
+})
+function Occupation1 (Ocupation1Length: Sprite) {
     if (Ocupation1Length.isHittingTile(CollisionDirection.Left)) {
         currentLocation = tiles.getTileLocation(currentLocation.column + 1, currentLocation.row)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Right))
@@ -32,7 +33,7 @@ function Occupation1(Ocupation1Length: Sprite) {
     }
     pause(40)
 }
-function MakeMap(Mazy: number, Direction: number, length: number, extraNum: number, overlap: boolean) {
+function MakeMap (Mazy: number, Direction: number, length: number, extraNum: number, overlap: boolean) {
     maziness = Mazy
     length2 = length
     for (let index = 0; index < Mazy; index++) {
@@ -71,43 +72,95 @@ function MakeMap(Mazy: number, Direction: number, length: number, extraNum: numb
         }
     }
 }
-function Occupation2(Occupation2Length: Sprite) {
+function Occupation2 (Occupation2Length: Sprite) {
     if (Occupation2Length.isHittingTile(CollisionDirection.Top)) {
-        direction = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
-        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Bottom))
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
+        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Bottom))
         tiles.setTileAt(currentLocation, assets.tile`transparency16`)
         tiles.setWallAt(currentLocation, false)
     } else {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         tiles.setWallAt(currentLocation, true)
-        direction = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Top))
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
     }
     pause(40)
 }
-function Occupation4(Occupation4Length: Sprite) {
+function Occupation4 (Occupation4Length: Sprite) {
     if (Occupation4Length.isHittingTile(CollisionDirection.Bottom)) {
-        direction = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
-        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Top))
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
+        tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Top))
         tiles.setTileAt(currentLocation, assets.tile`transparency16`)
         tiles.setWallAt(currentLocation, false)
     } else {
         tiles.setTileAt(currentLocation, assets.tile`myTile`)
         tiles.setWallAt(currentLocation, true)
-        direction = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
         tiles.placeOnTile(touching, currentLocation.getNeighboringLocation(CollisionDirection.Bottom))
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
     }
     pause(40)
 }
+function SpawnPlayer2 (bool: boolean) {
+    if (bool) {
+        playerTwo = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteType.MyselfTwo)
+        mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two), playerTwo)
+        PlayerTwoImage = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . 2 2 2 2 2 . . . . . 
+            . . . . . . 2 f 2 f 2 . . . . . 
+            . . . . . . 2 2 2 2 2 . . . . . 
+            . . . . . . . . 2 . . . . . . . 
+            . . . . . . . . 2 . . . . . . . 
+            . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
+            . . . 2 . . . . 2 . . . . 2 . . 
+            . . . . . . . 2 2 2 . . . . . . 
+            . . . . . . . . 2 . . . . . . . 
+            . . . . . . . . 2 . . . . . . . 
+            . . . . . . 2 2 2 2 2 . . . . . 
+            . . . . . . 2 . . . 2 . . . . . 
+            . . . . . . 2 . . . 2 . . . . . 
+            `, SpriteKind.image)
+        tiles.placeOnRandomTile(mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.Two)), assets.tile`transparency16`)
+        Render.setViewMode(ViewMode.raycastingView)
+        Render.setViewAngleInDegree(90)
+        mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.Two))
+        // Set the initial position of the sprite
+        PlayerTwoImage.setPosition(playerTwo.x, playerTwo.y)
+        PlayerTwoImage.follow(playerTwo, 1000)
+        splitScreen.cameraFollowSprite(splitScreen.Camera.Camera2, playerOne)
+    } else {
+    	
+    }
+}
+function CreateEnemy () {
+	
+}
+let PlayerTwoImage: Sprite = null
+let playerTwo: Sprite = null
 let Direction1 = 0
 let length3 = 0
 let maziness = 0
 let currentLocation: tiles.Location = null
-let direction: tiles.Location = null
+let playerOne: Sprite = null
 let touching: Sprite = null
 let length2 = 0
 scene.setBackgroundImage(img`
@@ -254,7 +307,7 @@ touching = sprites.create(img`
     `, SpriteKind.builder)
 tiles.placeOnTile(touching, tiles.getTileLocation(randint(0, 35), randint(0, 35)))
 scene.cameraFollowSprite(touching)
-MakeMap(game.askForNumber("How dence with walls?", 1), randint(0, 3), randint(1, 12), 1, true)
+MakeMap(game.askForNumber("How dense with walls?", 1), randint(0, 3), randint(1, 12), 1, true)
 enum SpriteType {
     MyselfOne,
     MyselfTwo
@@ -277,7 +330,7 @@ let PlayerOneImage = sprites.create(img`
     . . . . . . 1 . . . 1 . . . . . 
     . . . . . . 1 . . . 1 . . . . . 
     `, SpriteKind.image)
-let playerOne = sprites.create(img`
+playerOne = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -303,5 +356,6 @@ mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.One))
 // Set the initial position of the sprite
 PlayerOneImage.setPosition(playerOne.x, playerOne.y)
 PlayerOneImage.follow(playerOne, 1000)
-scene.cameraFollowSprite(playerOne)
+splitScreen.cameraFollowSprite(splitScreen.Camera.Camera1, playerOne)
 sprites.destroy(touching)
+SpawnPlayer2(mp.isConnected(mp.playerSelector(mp.PlayerNumber.Two)))
