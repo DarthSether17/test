@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const builder = SpriteKind.create()
     export const image = SpriteKind.create()
+    export const blobshot = SpriteKind.create()
 }
 function Occupation3 (Occupation3Length: Sprite) {
     if (Occupation3Length.isHittingTile(CollisionDirection.Right)) {
@@ -152,8 +153,51 @@ function SpawnPlayer2 (bool: boolean) {
     }
 }
 function CreateEnemy () {
-	
+    cuteBlob = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . a a a . . . a a a . 
+        . . . . . . a . a a . a a . a . 
+        . . . . . . a a a a a a a a a . 
+        . . . . . . 3 a a 3 a 3 3 . . . 
+        . . . . . a a 3 3 3 a a a . . . 
+        . . . 3 3 a 3 f 3 3 3 3 a . . . 
+        . . 3 3 3 3 3 3 3 3 f 3 3 . . . 
+        . . 3 3 3 3 f 3 f 3 3 3 3 . . . 
+        . . 3 3 3 3 f f f 3 3 3 3 . . . 
+        . . 3 3 3 3 3 3 3 3 3 3 . . . . 
+        . . 3 3 3 3 3 3 3 3 3 3 . . . . 
+        `, SpriteKind.Enemy)
+    cuteBlob.follow(playerOne, 40)
+    BlobDart = darts.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . 1 1 1 1 1 . . . . . . 
+        . . . . 1 3 3 3 3 3 1 . . . . . 
+        . . . 1 3 3 3 3 3 3 3 1 . . . . 
+        . . 1 3 3 1 3 3 3 1 3 3 1 . . . 
+        . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
+        . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
+        . . 1 3 1 f 3 3 3 f 1 3 1 . . . 
+        . . 1 3 3 f f 3 f f 3 3 1 . . . 
+        . . . 1 3 3 f 1 f 3 3 1 . . . . 
+        . . . . 1 3 3 3 3 3 1 . . . . . 
+        . . . . . 1 1 1 1 1 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.blobshot)
+    for (let index = 0; index < randint(2, 20); index++) {
+        tiles.placeOnRandomTile(cuteBlob, assets.tile`transparency16`)
+    }
 }
+let angle = 0
+let Distance = 0
+let BlobDart: Dart = null
+let cuteBlob: Sprite = null
 let PlayerTwoImage: Sprite = null
 let playerTwo: Sprite = null
 let Direction1 = 0
@@ -307,6 +351,7 @@ touching = sprites.create(img`
     `, SpriteKind.builder)
 tiles.placeOnTile(touching, tiles.getTileLocation(randint(0, 35), randint(0, 35)))
 scene.cameraFollowSprite(touching)
+CreateEnemy()
 MakeMap(game.askForNumber("How dense with walls?", 1), randint(0, 3), randint(1, 12), 1, true)
 enum SpriteType {
     MyselfOne,
@@ -352,6 +397,7 @@ mp.setPlayerSprite(mp.playerSelector(mp.PlayerNumber.One), playerOne)
 mp.setPlayerIndicatorsVisible(true)
 Render.setViewMode(ViewMode.raycastingView)
 Render.setViewAngleInDegree(90)
+tiles.placeOnRandomTile(playerOne, assets.tile`transparency16`)
 mp.moveWithButtons(mp.playerSelector(mp.PlayerNumber.One))
 // Set the initial position of the sprite
 PlayerOneImage.setPosition(playerOne.x, playerOne.y)
@@ -359,3 +405,21 @@ PlayerOneImage.follow(playerOne, 1000)
 splitScreen.cameraFollowSprite(splitScreen.Camera.Camera1, playerOne)
 sprites.destroy(touching)
 SpawnPlayer2(mp.isConnected(mp.playerSelector(mp.PlayerNumber.Two)))
+game.onUpdate(function () {
+    for (let value of cuteBlob) {
+        Distance = Math.sqrt(Math.abs((playerOne.column - value.column) * (playerOne.column - value.column) + (playerOne.row - value.row) * (playerOne.row - value.row)))
+        if (0 < 0) {
+            angle = 0
+        } else if (0 < 0) {
+            angle = 0
+        } else if (0 < 0) {
+            angle = 0
+        } else {
+            angle = 0
+        }
+        BlobDart.angle = angle
+        if (Distance >= 80) {
+            BlobDart.throwDart()
+        }
+    }
+})
