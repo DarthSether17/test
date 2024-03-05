@@ -1,6 +1,7 @@
 namespace SpriteKind {
     export const builder = SpriteKind.create()
     export const image = SpriteKind.create()
+    export const BlobEnemy = SpriteKind.create()
 }
 function Occupation3 (Occupation3Length: Sprite) {
     if (Occupation3Length.isHittingTile(CollisionDirection.Right)) {
@@ -152,8 +153,30 @@ function SpawnPlayer2 (bool: boolean) {
     }
 }
 function CreateEnemy () {
-	
+    for (let index = 0; index < randint(2, 10); index++) {
+        blob = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.BlobEnemy)
+        tiles.placeOnRandomTile(blob, assets.tile`transparency16`)
+    }
 }
+let Distance = 0
+let blob: Sprite = null
 let PlayerTwoImage: Sprite = null
 let playerTwo: Sprite = null
 let Direction1 = 0
@@ -359,3 +382,13 @@ PlayerOneImage.follow(playerOne, 1000)
 splitScreen.cameraFollowSprite(splitScreen.Camera.Camera1, playerOne)
 sprites.destroy(touching)
 SpawnPlayer2(mp.isConnected(mp.playerSelector(mp.PlayerNumber.Two)))
+game.onUpdate(function () {
+    for (let value of sprites.allOfKind(SpriteKind.BlobEnemy)) {
+        Distance = Math.sqrt(Math.abs((playerOne.tilemapLocation().column - value.tilemapLocation().column) * (playerOne.tilemapLocation().column - value.tilemapLocation().column) + (playerOne.tilemapLocation().row - value.tilemapLocation().row) * (playerOne.tilemapLocation().row - value.tilemapLocation().row)))
+        if (true) {
+        	
+        } else {
+        	
+        }
+    }
+})
