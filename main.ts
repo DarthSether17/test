@@ -633,7 +633,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         ................................................................................................................................................................
         ................................................................................................................................................................
         ................................................................................................................................................................
-        `, SpriteKind.HandgunBullet)
+        `, SpriteKind.HandgunBullet, Render.getRenderSpriteInstance().tilemapLocation().column, Render.getRenderSpriteInstance().tilemapLocation().row)
+    HandgunBullet2.pow = 500
+    HandgunBullet2.throwDart()
 })
 function Occupation1 (Ocupation1Length: Sprite) {
     if (Ocupation1Length.isHittingTile(CollisionDirection.Left)) {
@@ -1256,44 +1258,44 @@ function SpawnPlayer2 (bool: boolean) {
     }
 }
 function CreateEnemy () {
-    cuteBlob = sprites.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . a a a . . . a a a . 
-        . . . . . . a . a a . a a . a . 
-        . . . . . . a a a a a a a a a . 
-        . . . . . . 3 a a 3 a 3 3 . . . 
-        . . . . . a a 3 3 3 a a a . . . 
-        . . . 3 3 a 3 f 3 3 3 3 a . . . 
-        . . 3 3 3 3 3 3 3 3 f 3 3 . . . 
-        . . 3 3 3 3 f 3 f 3 3 3 3 . . . 
-        . . 3 3 3 3 f f f 3 3 3 3 . . . 
-        . . 3 3 3 3 3 3 3 3 3 3 . . . . 
-        . . 3 3 3 3 3 3 3 3 3 3 . . . . 
-        `, SpriteKind.Blob)
-    cuteBlob.follow(mp.getPlayerSprite(mp.playerSelector(mp.PlayerNumber.One)), 40)
-    BlobDart = darts.create(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . 1 1 1 1 1 . . . . . . 
-        . . . . 1 3 3 3 3 3 1 . . . . . 
-        . . . 1 3 3 3 3 3 3 3 1 . . . . 
-        . . 1 3 3 1 3 3 3 1 3 3 1 . . . 
-        . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
-        . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
-        . . 1 3 1 f 3 3 3 f 1 3 1 . . . 
-        . . 1 3 3 f f 3 f f 3 3 1 . . . 
-        . . . 1 3 3 f 1 f 3 3 1 . . . . 
-        . . . . 1 3 3 3 3 3 1 . . . . . 
-        . . . . . 1 1 1 1 1 . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, SpriteKind.blobshot, cuteBlob.tilemapLocation().column, cuteBlob.tilemapLocation().row)
     for (let index = 0; index < randint(2, 20); index++) {
+        cuteBlob = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . a a a . . . a a a . 
+            . . . . . . a . a a . a a . a . 
+            . . . . . . a a a a a a a a a . 
+            . . . . . . 3 a a 3 a 3 3 . . . 
+            . . . . . a a 3 3 3 a a a . . . 
+            . . . 3 3 a 3 f 3 3 3 3 a . . . 
+            . . 3 3 3 3 3 3 3 3 f 3 3 . . . 
+            . . 3 3 3 3 f 3 f 3 3 3 3 . . . 
+            . . 3 3 3 3 f f f 3 3 3 3 . . . 
+            . . 3 3 3 3 3 3 3 3 3 3 . . . . 
+            . . 3 3 3 3 3 3 3 3 3 3 . . . . 
+            `, SpriteKind.Blob)
+        cuteBlob.follow(Render.getRenderSpriteVariable(), 40)
+        BlobDart = darts.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . 1 1 1 1 1 . . . . . . 
+            . . . . 1 3 3 3 3 3 1 . . . . . 
+            . . . 1 3 3 3 3 3 3 3 1 . . . . 
+            . . 1 3 3 1 3 3 3 1 3 3 1 . . . 
+            . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
+            . . 1 3 3 3 3 3 3 3 3 3 1 . . . 
+            . . 1 3 1 f 3 3 3 f 1 3 1 . . . 
+            . . 1 3 3 f f 3 f f 3 3 1 . . . 
+            . . . 1 3 3 f 1 f 3 3 1 . . . . 
+            . . . . 1 3 3 3 3 3 1 . . . . . 
+            . . . . . 1 1 1 1 1 . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.blobshot, cuteBlob.tilemapLocation().column, cuteBlob.tilemapLocation().row)
         tiles.placeOnRandomTile(cuteBlob, assets.tile`transparency16`)
     }
 }
@@ -1632,22 +1634,23 @@ PlayerOneImage.follow(playerOne, 1000)
 sprites.destroy(touching)
 game.onUpdate(function () {
     for (let value of sprites.allOfKind(SpriteKind.Player)) {
-        Distance = Math.sqrt(Math.abs((playerOne.tilemapLocation().column - value.tilemapLocation().column) * (playerOne.tilemapLocation().column - value.tilemapLocation().column) + (playerOne.tilemapLocation().row - value.tilemapLocation().row) * (playerOne.tilemapLocation().row - value.tilemapLocation().row)))
-        if (playerOne.tilemapLocation().column < value.tilemapLocation().column) {
+        Distance = Math.sqrt(Math.abs((Render.getRenderSpriteInstance().tilemapLocation().column - value.tilemapLocation().column) * (Render.getRenderSpriteInstance().tilemapLocation().column - value.tilemapLocation().column) + (Render.getRenderSpriteInstance().tilemapLocation().row - value.tilemapLocation().row) * (Render.getRenderSpriteInstance().tilemapLocation().row - value.tilemapLocation().row)))
+        if (Render.getRenderSpriteInstance().tilemapLocation().column < value.tilemapLocation().column) {
             angle = 180
-        } else if (value.tilemapLocation().column < playerOne.tilemapLocation().column) {
+        } else if (value.tilemapLocation().column < Render.getRenderSpriteInstance().tilemapLocation().column) {
             angle = 0
-        } else if (value.tilemapLocation().row < playerOne.tilemapLocation().row) {
+        } else if (value.tilemapLocation().row < Render.getRenderSpriteInstance().tilemapLocation().row) {
             angle = 90
-        } else if (value.tilemapLocation().row > playerOne.tilemapLocation().row) {
+        } else if (value.tilemapLocation().row > Render.getRenderSpriteInstance().tilemapLocation().row) {
             angle = 270
         }
         BlobDart.angle = angle
         BlobDart.pow = 100
-        if (Distance <= 80) {
-            BlobDart.throwDart()
+        if (Distance <= 100) {
+        	
         }
     }
+    BlobDart.throwDart()
     if (playerOne.vx == 0 && playerOne.vy == 0 && !(controller.B.isPressed())) {
         animation.runImageAnimation(
         HandgunImage,
