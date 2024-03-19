@@ -2468,6 +2468,10 @@ function Occupation2 (Occupation2Length: Sprite) {
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.blobshot, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    sprites.destroy(otherSprite, effects.ashes, 100)
+})
 function Occupation4 (Occupation4Length: Sprite) {
     if (Occupation4Length.isHittingTile(CollisionDirection.Bottom)) {
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
@@ -2481,6 +2485,9 @@ function Occupation4 (Occupation4Length: Sprite) {
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row + 1)
     }
 }
+info.onLifeZero(function () {
+    game.gameOver(false)
+})
 controller.B.onEvent(ControllerButtonEvent.Released, function () {
     animation.runImageAnimation(
     HandgunImage,
@@ -3747,6 +3754,7 @@ Ammo.setFlag(SpriteFlag.RelativeToCamera, true)
 scene.setBackgroundImage(backgroundImages._pickRandom())
 AmountofAmmo = 0
 timeAfterBlobShot = 0
+info.setLife(1)
 game.onUpdate(function () {
     for (let value of sprites.allOfKind(SpriteKind.Blob)) {
         Distance = Math.sqrt(Math.abs((Render.getRenderSpriteInstance().tilemapLocation().column - value.tilemapLocation().column) * (Render.getRenderSpriteInstance().tilemapLocation().column - value.tilemapLocation().column) + (Render.getRenderSpriteInstance().tilemapLocation().row - value.tilemapLocation().row) * (Render.getRenderSpriteInstance().tilemapLocation().row - value.tilemapLocation().row)))
