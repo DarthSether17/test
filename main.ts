@@ -915,7 +915,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
-            `, SpriteKind.Projectile)
+            `, SpriteKind.HandgunBullet)
         HandgunBullet2 = sprites.createProjectileFromSprite(img`
             ................................................................................................................................................................
             ................................................................................................................................................................
@@ -2468,10 +2468,6 @@ function Occupation2 (Occupation2Length: Sprite) {
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
     }
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.blobshot, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
-    sprites.destroy(otherSprite, effects.ashes, 100)
-})
 function Occupation4 (Occupation4Length: Sprite) {
     if (Occupation4Length.isHittingTile(CollisionDirection.Bottom)) {
         currentLocation = tiles.getTileLocation(currentLocation.column, currentLocation.row - 1)
@@ -5511,6 +5507,12 @@ game.onUpdateInterval(500, function () {
             if (timeAfterBlobShot == 6) {
                 sprites.destroy(BlobDart, effects.ashes, 500)
             }
+        }
+    }
+    for (let value of sprites.allOfKind(SpriteKind.blobshot)) {
+        if (Render.getRenderSpriteInstance().overlapsWith(value)) {
+            info.changeLifeBy(-1)
+            sprites.destroy(value, effects.ashes, 100)
         }
     }
 })
